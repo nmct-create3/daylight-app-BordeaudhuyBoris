@@ -32,7 +32,7 @@ let updateSun = (percentage, json_file) => {
   if (percentage < 50) {
     document.querySelector('.js-sun').style.right = `${percentage}%`;
   } else document.querySelector('.js-sun').style.left = `${percentage}%`;
-  document.querySelector('.js-sun').style.top = `${percentage - 33}% `;
+  document.querySelector('.js-sun').style.top = `${percentage - 24}% `;
   let newtime = parseInt(hours) * 60 + parseInt(minutes);
   const datesunset = new Date(json_file.sunset * 1000);
   let hourssunset = datesunset.getHours();
@@ -40,6 +40,10 @@ let updateSun = (percentage, json_file) => {
   const sunsetMinutes = minutessunset + hourssunset * 60;
   timeLeft = sunsetMinutes - newtime;
   document.querySelector('.js-time-left').innerText = timeLeft;
+  if (timeLeft <= 0) {
+    document.querySelector('.js-time-left').innerText = '0';
+    document.querySelector('.js-horizon').innerHTML = '';
+  }
 };
 
 // 4 Zet de zon op de juiste plaats en zorg ervoor dat dit iedere minuut gebeurt.
@@ -62,6 +66,8 @@ let placeSunAndStartMoving = (totalMinutes, sunrise, json_file) => {
   // Vergeet niet om het resterende aantal minuten in te vullen.
   // Nu maken we een functie die de zon elke minuut zal updaten
   // Bekijk of de zon niet nog onder of reeds onder is
+  if (timeLeft <= 0){document.getElementsByTagName('html')[0].classList.add('is-night');}
+  else {document.getElementsByTagName('html')[0].classList.remove('is-night');}
   // Anders kunnen we huidige waarden evalueren en de zon updaten via de updateSun functie.
   // PS.: vergeet weer niet om het resterend aantal minuten te updaten en verhoog het aantal verstreken minuten.
 };
